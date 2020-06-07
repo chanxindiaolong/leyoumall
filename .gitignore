@@ -1,0 +1,9 @@
+# Project exclude paths
+/ly-auth/ly-auth-common/target/
+/ly-auth/ly-auth-service/target/
+/ly-common/target/
+/ly-gateway/target/
+/ly-registry/target/
+/ly-sms/target/
+/ly-user/ly-user-interface/target/
+/ly-user/ly-user-service/target/

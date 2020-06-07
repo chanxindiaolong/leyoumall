@@ -1,0 +1,31 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: item-service
+  datasource:
+    url: jdbc:mysql://api.leyou.com:3306/yun6
+    username: root
+    password: admin
+  rabbitmq:
+    host: api.leyou.com
+    username: leyou
+    password: 123321
+    virtual-host: /leyou
+    template:
+      exchange: leyou.item.exchange
+#    已过时
+#    publisher-confirms: true
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:10086/eureka
+  instance:
+    lease-renewal-interval-in-seconds: 5 # 每隔5秒发送一次心跳
+    lease-expiration-duration-in-seconds: 10 # 10秒不发送就过期
+    prefer-ip-address: true
+    ip-address: 127.0.0.1
+    instance-id: ${spring.application.name}:${server.port}
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
