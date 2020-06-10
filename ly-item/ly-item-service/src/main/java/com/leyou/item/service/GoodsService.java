@@ -162,6 +162,16 @@ public class GoodsService {
 //            s.setStock(stock.getStock());
 //        }
         List<Long> ids = skuList.stream().map(Sku::getId).collect(Collectors.toList());
+        loadStockInSku(skuList, ids);
+        return skuList;
+    }
+
+    /**
+     * 查询库存并封装
+     * @param skuList sku集合
+     * @param ids skuId集合
+     */
+    private void loadStockInSku(List<Sku> skuList, List<Long> ids) {
         List<Stock> stocks = stockMapper.selectByIdList(ids);
         if (CollectionUtils.isEmpty(stocks)) {
             throw new LyException(ExceptionEnum.GOODS_STOCK_NOT_FOUND);
@@ -170,7 +180,6 @@ public class GoodsService {
         Map<Long, Integer> stockMap = stocks.stream().collect(Collectors.toMap(Stock::getSkuId, Stock::getStock));
 
         skuList.forEach(s -> s.setStock(stockMap.get(s.getId())));
-        return skuList;
     }
 
     @Transactional
@@ -221,5 +230,14 @@ public class GoodsService {
         //查询detail
         spuBo.setSpuDetail(querySpuDetailById(id));
         return spuBo;
+    }
+
+    public List<Sku> querySkuListByIds(List<Long> ids) {
+        List<Sku> skus = skuMapper.selectByIdList(ids);
+        if(CollectionUtils.isEmpty(skus)){
+            throw new LyException(ExceptionEnum.GOODS_SKU_NOT_FOUND);
+        }
+        loadStockInSku(skus,ids);
+        return skus;
     }
 }
