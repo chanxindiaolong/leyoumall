@@ -27,7 +27,8 @@ public enum ExceptionEnum {
     INVALID_VERIFY_CODE_ERROR(400,"验证码不正确"),
     INVALID_USERNAME_PASSWORD_ERROR(400,"用户名或密码错误"),
     CREATE_TOKEN_ERROR(500,"token生成失败"),
-    UNAUTHORIZED(403,"未授权");
+    UNAUTHORIZED(403,"未授权"),
+    CART_NOT_FOUND(404,"购物车信息未找到");
     private int code;
     private String msg;
 }

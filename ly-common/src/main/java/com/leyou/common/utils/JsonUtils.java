@@ -3,7 +3,6 @@ package com.leyou.common.utils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.istack.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +20,6 @@ public class JsonUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(JsonUtils.class);
 
-    @Nullable
     public static String toString(Object obj) {
         if (obj == null) {
             return null;
@@ -37,8 +35,7 @@ public class JsonUtils {
         }
     }
 
-    @Nullable
-    public static <T> T parse(String json, Class<T> tClass) {
+    public static <T> T toBean(String json, Class<T> tClass) {
         try {
             return mapper.readValue(json, tClass);
         } catch (IOException e) {
@@ -47,8 +44,7 @@ public class JsonUtils {
         }
     }
 
-    @Nullable
-    public static <E> List<E> parseList(String json, Class<E> eClass) {
+    public static <E> List<E> toList(String json, Class<E> eClass) {
         try {
             return mapper.readValue(json, mapper.getTypeFactory().constructCollectionType(List.class, eClass));
         } catch (IOException e) {
@@ -57,7 +53,6 @@ public class JsonUtils {
         }
     }
 
-    @Nullable
     public static <K, V> Map<K, V> toMap(String json, Class<K> kClass, Class<V> vClass) {
         try {
             return mapper.readValue(json, mapper.getTypeFactory().constructMapType(Map.class, kClass, vClass));
@@ -67,7 +62,6 @@ public class JsonUtils {
         }
     }
 
-    @Nullable
     public static <T> T nativeRead(String json, TypeReference<T> type) {
         try {
             return mapper.readValue(json, type);

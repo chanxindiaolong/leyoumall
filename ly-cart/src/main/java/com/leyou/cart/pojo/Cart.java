@@ -1,5 +1,8 @@
 package com.leyou.cart.pojo;
 
+import lombok.Data;
+
+@Data
 public class Cart {
     private Long userId;// 用户id
     private Long skuId;// 商品id
