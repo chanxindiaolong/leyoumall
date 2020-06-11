@@ -20,6 +20,7 @@ zuul:
     search-service: /search/** # 将商品微服务映射到/item/**
     user-service: /user/**
     auth-service: /auth/**
+    cart-service: /cart/**
     upload-service:
       path: /upload/**
       serviceId: upload-service
