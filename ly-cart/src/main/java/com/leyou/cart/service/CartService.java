@@ -63,6 +63,12 @@ public class CartService {
         Cart cart = JsonUtils.toBean(operations.get(hashKey).toString(), Cart.class);
         cart.setNum(num);
 
-        operations.put(hashKey,JsonUtils.toString(cart));
+        operations.put(hashKey, JsonUtils.toString(cart));
+    }
+
+    public void deleteCart(Long skuId) {
+        UserInfo user = UserInterceptor.getLoginUser();
+        String key = KEY_PREFIX + user.getId();
+        redisTemplate.opsForHash().delete(key, skuId.toString());
     }
 }

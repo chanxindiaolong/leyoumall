@@ -13,25 +13,33 @@ import java.util.List;
 public class CartController {
     @Autowired
     private CartService cartService;
+
     /**
      * 新增购物车
+     *
      * @param cart
      * @return
      */
     @PostMapping
-    public ResponseEntity<Void> addCart(@RequestBody Cart cart){
+    public ResponseEntity<Void> addCart(@RequestBody Cart cart) {
         cartService.addCart(cart);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("list")
-    public ResponseEntity<List<Cart>> queryCartList(){
+    public ResponseEntity<List<Cart>> queryCartList() {
         return ResponseEntity.ok(cartService.queryCartList());
     }
 
     @PutMapping
-    public ResponseEntity<Void> updateCartNum(@RequestParam("id") Long skuId,@RequestParam("num") Integer num){
-        cartService.updateNum(skuId,num);
+    public ResponseEntity<Void> updateCartNum(@RequestParam("id") Long skuId, @RequestParam("num") Integer num) {
+        cartService.updateNum(skuId, num);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @DeleteMapping("{skuId}")
+    public ResponseEntity<Void> deleteCart(@PathVariable("skuId") Long skuId) {
+        cartService.deleteCart(skuId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
