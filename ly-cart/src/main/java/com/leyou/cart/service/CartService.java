@@ -48,4 +48,21 @@ public class CartService {
         List<Cart> carts = operation.values().stream().map(o -> JsonUtils.toBean(o.toString(), Cart.class)).collect(Collectors.toList());
         return carts;
     }
+
+    public void updateNum(Long skuId, Integer num) {
+        UserInfo user = UserInterceptor.getLoginUser();
+        String key = KEY_PREFIX + user.getId();
+        String hashKey = skuId.toString();
+
+        BoundHashOperations<String, Object, Object> operations = redisTemplate.boundHashOps(key);
+
+        if (!operations.hasKey(hashKey)) {
+            throw new LyException(ExceptionEnum.CART_NOT_FOUND);
+        }
+
+        Cart cart = JsonUtils.toBean(operations.get(hashKey).toString(), Cart.class);
+        cart.setNum(num);
+
+        operations.put(hashKey,JsonUtils.toString(cart));
+    }
 }

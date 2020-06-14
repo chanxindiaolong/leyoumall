@@ -3,13 +3,9 @@ package com.leyou.cart.web;
 import com.leyou.cart.pojo.Cart;
 import com.leyou.cart.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,5 +27,11 @@ public class CartController {
     @GetMapping("list")
     public ResponseEntity<List<Cart>> queryCartList(){
         return ResponseEntity.ok(cartService.queryCartList());
+    }
+
+    @PutMapping
+    public ResponseEntity<Void> updateCartNum(@RequestParam("id") Long skuId,@RequestParam("num") Integer num){
+        cartService.updateNum(skuId,num);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
