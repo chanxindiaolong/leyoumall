@@ -28,7 +28,16 @@ public enum ExceptionEnum {
     INVALID_USERNAME_PASSWORD_ERROR(400,"用户名或密码错误"),
     CREATE_TOKEN_ERROR(500,"token生成失败"),
     UNAUTHORIZED(403,"未授权"),
-    CART_NOT_FOUND(404,"购物车信息未找到");
+    CART_NOT_FOUND(404,"购物车信息未找到"),
+    RECEIVER_ADDRESS_NOT_FOUND(404,"收获地址不存在"),
+    ORDER_NOT_FOUND(404,"订单未找到"),
+    CREATE_ORDER_ERROR(500,"创建订单失败"),
+    CREATE_ORDER_DETAIL_ERROR(500,"创建订单详情失败"),
+    STOCK_NOT_ENOUGH(500,"库存不足"),
+    ORDER_STATUS_EXCEPTION(500,"订单状态异常"),
+    CREATE_PAY_URL_ERROR(500,"创建支付链接异常"),
+    WX_PAY_SIGN_INVALID(500,"微信支付签名失败"),
+    WX_PAY_NOTIFY_PARAM_ERROR(500,"微信支付回调数据不正确");
     private int code;
     private String msg;
 }

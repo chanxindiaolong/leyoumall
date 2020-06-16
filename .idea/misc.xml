@@ -12,6 +12,7 @@
         <option value="$PROJECT_DIR$/ly-auth/ly-auth-service/pom.xml" />
         <option value="$PROJECT_DIR$/ly-auth/ly-auth-common/pom.xml" />
         <option value="$PROJECT_DIR$/ly-search/pom.xml" />
+        <option value="$PROJECT_DIR$/ly-order/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

@@ -7,10 +7,7 @@ import org.joda.time.DateTime;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 
-/**
- * @author bystander
- * @date 2018/10/1
- */
+
 public class JwtUtils {
     /**
      * 生成Token

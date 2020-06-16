@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.leyou.common.enums.ExceptionEnum;
 import com.leyou.common.exception.LyException;
 import com.leyou.common.vo.PageResult;
+import com.leyou.dto.CartDto;
 import com.leyou.item.mapper.SkuMapper;
 import com.leyou.item.mapper.SpuDetailMapper;
 import com.leyou.item.mapper.SpuMapper;
@@ -239,5 +240,15 @@ public class GoodsService {
         }
         loadStockInSku(skus,ids);
         return skus;
+    }
+
+    @Transactional
+    public void decreaseStock(List<CartDto> carts) {
+        for (CartDto cart : carts) {
+            int count = stockMapper.decreaseStock(cart.getSkuId(), cart.getNum());
+            if(count!=1){
+                throw new LyException(ExceptionEnum.STOCK_NOT_ENOUGH);
+            }
+        }
     }
 }
