@@ -101,14 +101,14 @@ public class PayHelper {
             //通信失败
             if (WXPayConstants.FAIL.equals(result.get("return_code"))) {
                 log.error("【微信下单】与微信通信失败，失败信息：{}", result.get("return_msg"));
-                return null;
+                throw new LyException(ExceptionEnum.WX_PAY_ORDER_FAIL);
             }
 
             //下单失败
             if (WXPayConstants.FAIL.equals(result.get("result_code"))) {
                 log.error("【微信下单】创建预交易订单失败，错误码：{}，错误信息：{}",
                         result.get("err_code"), result.get("err_code_des"));
-                return null;
+                throw new LyException(ExceptionEnum.WX_PAY_ORDER_FAIL);
             }
 
             //检验签名
@@ -158,7 +158,6 @@ public class PayHelper {
         //检验签名
         isSignatureValid(msg);
 
-        //检验金额
         //解析数据
         String totalFee = msg.get("total_fee");  //订单金额
         String outTradeNo = msg.get("out_trade_no");  //订单编号
@@ -172,10 +171,9 @@ public class PayHelper {
 
         //查询订单
         Order order = orderMapper.selectByPrimaryKey(Long.valueOf(outTradeNo));
-
-        //todo 这里验证回调数据时，支付金额使用1分进行验证，后续使用实际支付金额验证
-        if (/*order.getActualPay()*/1 != Long.valueOf(totalFee)) {
-            log.error("【微信支付回调】支付回调返回数据不正确");
+        //检验金额
+        if (!order.getActualPay().equals(Long.valueOf(totalFee))) {
+            log.error("【微信支付回调】金额不符");
             throw new LyException(ExceptionEnum.WX_PAY_NOTIFY_PARAM_ERROR);
 
         }
@@ -183,7 +181,7 @@ public class PayHelper {
         //判断支付状态
         OrderStatus orderStatus = statusMapper.selectByPrimaryKey(Long.valueOf(outTradeNo));
 
-        if (orderStatus.getStatus() != OrderStatusEnum.INIT.value()) {
+        if (!orderStatus.getStatus().equals(OrderStatusEnum.INIT.value())) {
             //支付成功
             return;
         }

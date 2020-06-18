@@ -30,14 +30,17 @@ public enum ExceptionEnum {
     UNAUTHORIZED(403,"未授权"),
     CART_NOT_FOUND(404,"购物车信息未找到"),
     RECEIVER_ADDRESS_NOT_FOUND(404,"收获地址不存在"),
-    ORDER_NOT_FOUND(404,"订单未找到"),
+    ORDER_NOT_FOUND(404,"订单不存在"),
     CREATE_ORDER_ERROR(500,"创建订单失败"),
     CREATE_ORDER_DETAIL_ERROR(500,"创建订单详情失败"),
     STOCK_NOT_ENOUGH(500,"库存不足"),
     ORDER_STATUS_EXCEPTION(500,"订单状态异常"),
     CREATE_PAY_URL_ERROR(500,"创建支付链接异常"),
     WX_PAY_SIGN_INVALID(500,"微信支付签名失败"),
-    WX_PAY_NOTIFY_PARAM_ERROR(500,"微信支付回调数据不正确");
+    WX_PAY_NOTIFY_PARAM_ERROR(500,"微信支付回调数据不正确"),
+    ORDER_DETAIL_NOT_FOUND(404,"订单详情不存在"),
+    ORDER_STATUS_NOT_FOUND(404,"订单状态不存在"),
+    WX_PAY_ORDER_FAIL(500,"微信下单失败");
     private int code;
     private String msg;
 }

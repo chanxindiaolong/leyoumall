@@ -23,6 +23,7 @@ import com.leyou.order.pojo.OrderStatus;
 import com.leyou.order.utils.PayHelper;
 import com.leyou.pojo.Sku;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -182,12 +183,14 @@ public class OrderService {
         //根据订单ID查询订单
         Order order = queryById(orderId);
         //判断订单状态
-        if (order.getOrderStatus().getStatus() != OrderStatusEnum.INIT.value()) {
+        if (!order.getOrderStatus().getStatus().equals(OrderStatusEnum.INIT.value())) {
             throw new LyException(ExceptionEnum.ORDER_STATUS_EXCEPTION);
         }
 
-        //todo 这里传入一份钱，用于测试使用，实际中使用订单中的实付金额
-        String url = payHelper.createPayUrl(orderId, "乐优商城测试", /*order.getActualPay()*/1L);
+        OrderDetail orderDetail = order.getOrderDetails().get(0);
+        String desc = orderDetail.getTitle();
+
+        String url = payHelper.createPayUrl(orderId, desc, order.getActualPay());
         if (StringUtils.isBlank(url)) {
             throw new LyException(ExceptionEnum.CREATE_PAY_URL_ERROR);
         }
@@ -201,14 +204,20 @@ public class OrderService {
 
     public Order queryById(Long orderId) {
         Order order = orderMapper.selectByPrimaryKey(orderId);
-        if (order == null) {
+        if (ObjectUtils.isEmpty(order)) {
             throw new LyException(ExceptionEnum.ORDER_NOT_FOUND);
         }
         OrderDetail orderDetail = new OrderDetail();
         orderDetail.setOrderId(orderId);
         List<OrderDetail> orderDetails = orderDetailMapper.select(orderDetail);
+        if(CollectionUtils.isEmpty(orderDetails)){
+            throw new LyException(ExceptionEnum.ORDER_DETAIL_NOT_FOUND);
+        }
         order.setOrderDetails(orderDetails);
         OrderStatus orderStatus = orderStatusMapper.selectByPrimaryKey(orderId);
+        if(ObjectUtils.isEmpty(orderStatus)){
+            throw new LyException(ExceptionEnum.ORDER_STATUS_NOT_FOUND);
+        }
         order.setOrderStatus(orderStatus);
         return order;
     }
@@ -246,4 +255,5 @@ public class OrderService {
 
         return new PageResult<>(pageInfo.getTotal(), Long.valueOf(pageInfo.getPages()), pageInfo.getList());
     }
+
 }
